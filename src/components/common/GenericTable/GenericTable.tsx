@@ -24,6 +24,7 @@ export const GenericTable = <T extends object>({
   enablePagination = true,
   title,
 }: GenericTableProps<T>) => {
+  // Crear la tabla con las columnas, los datos y los filtros
   const table = useMaterialReactTable<T>({
     columns,
     data,

@@ -30,6 +30,7 @@
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
       "@contexts/*": ["contexts/*"],
+      "@dtos/*": ["dtos/*"],
       "@hooks/*": ["hooks/*"],
       "@libs/*": ["libs/*"],
       "@pages/*": ["pages/*"],

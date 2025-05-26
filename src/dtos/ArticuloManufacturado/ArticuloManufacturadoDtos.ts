@@ -1,0 +1,36 @@
+import type { AssignToRelationsDto, ResponseDto } from "@dtos/BaseDtos";
+import type { ArticuloManufacturadoDetalleRelation } from "./ArticuloManufacturadoDetalleDtos";
+import type { ArticuloManufacturadoRubroRelation } from "./ArticuloManufacturadoRubroDtos";
+
+// ARTICULO MANUFACTURADO RESPONSE
+export interface ArticuloManufacturadoResponse extends ResponseDto {
+  denominacion: string;
+  descripcion: string;
+  precioCompra: number;
+  precioVenta: number;
+  imagen: string | null;
+  tiempoEstimado: number;
+  articuloManufacturadoRubro: ArticuloManufacturadoRubroRelation;
+  detalles: ArticuloManufacturadoDetalleRelation[];
+}
+
+// ARTICULO MANUFACTURADO REQUEST
+export interface ArticuloManufacturadoRequest {
+  denominacion: string;
+  descripcion: string;
+  precioCompra: number;
+  precioVenta: number;
+  imagen: string | null;
+}
+
+// ARTICULO MANUFACTURADO RELACION
+export interface ArticuloManufacturadoRelation extends AssignToRelationsDto {
+  denominacion: string;
+  descripcion: string;
+  precioCompra: number;
+  precioVenta: number;
+  imagen: string | null;
+  tiempoEstimado: number;
+  articuloManufacturadoRubro: ArticuloManufacturadoRubroRelation;
+  detalles: ArticuloManufacturadoDetalleRelation[];
+}

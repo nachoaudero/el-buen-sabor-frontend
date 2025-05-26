@@ -1,18 +1,17 @@
 import { AppNavbar } from "@components/common/AppNavbar";
-import { AdminPage } from "@pages/AdminPage";
-import { Container } from "react-bootstrap";
+import { Outlet } from "react-router";
 
 export const App = () => {
   return (
     <main className="d-flex flex-column min-vh-100">
+      {/* NAVBAR */}
       <AppNavbar />
-      <Container
-        fluid="md"
-        className="flex-grow-1 my-5"
-        as="main"
-      >
-        <AdminPage />
-      </Container>
+
+      {/* CONTENEDOR DE TODA LA APP */}
+      <section className="flex-grow-1 my-5">
+        {/* CONTENIDO DE LA RUTA */}
+        <Outlet />
+      </section>
     </main>
   );
 };

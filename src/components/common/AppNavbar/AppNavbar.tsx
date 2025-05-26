@@ -1,5 +1,6 @@
 import { Person } from "@mui/icons-material";
 import { Container, Dropdown, Nav, Navbar } from "react-bootstrap";
+import { Link } from "react-router";
 
 export const AppNavbar = () => {
   return (
@@ -12,8 +13,12 @@ export const AppNavbar = () => {
         fluid
         // className="justify-content-end justify-content-md-between"
       >
-        {/* LOGO Y ROL LADO IZQUIERDO */}
-        <Navbar.Brand className="d-none d-md-flex align-items-center gap-3 fw-bold">
+        {/* LOGO */}
+        <Navbar.Brand
+          className="align-items-center gap-3 fw-bold"
+          as={Link}
+          to="/ebs"
+        >
           <img
             src="/src/assets/images/El buen sabor logo 2.png"
             width="55"
@@ -21,18 +26,11 @@ export const AppNavbar = () => {
             className="d-inline-block align-top"
             alt="El buen sabor logo"
           />
-          Administrador
         </Navbar.Brand>
 
-        {/* NAVBAR MOBILE */}
-        <Navbar.Brand className="d-flex d-md-none align-items-center gap-3 fw-bold">
-          <img
-            src="/src/assets/images/El buen sabor logo 2.png"
-            width="55"
-            height="55"
-            className="d-inline-block align-top"
-            alt="El buen sabor logo"
-          />
+        {/* ROL */}
+        <Navbar.Brand className="d-none d-md-flex align-items-center gap-3 fw-bold">
+          Administrador
         </Navbar.Brand>
 
         {/* BOTON PARA DESPLEGAR EL MENU */}
@@ -55,7 +53,7 @@ export const AppNavbar = () => {
 
           {/* MENU USUARIO */}
           <Dropdown
-            align={{ lg: "end" }}
+            align={{ md: "end" }}
             className="shadow-sm"
           >
             <Dropdown.Toggle
@@ -68,12 +66,42 @@ export const AppNavbar = () => {
 
             {/* DROPDOWN USUARIO */}
             <Dropdown.Menu>
-              <Dropdown.Item>Pedidos a preparar</Dropdown.Item>
-              <Dropdown.Item>Productos</Dropdown.Item>
-              <Dropdown.Item>Rubro productos</Dropdown.Item>
-              <Dropdown.Item>Insumos</Dropdown.Item>
-              <Dropdown.Item>Rubro insumos</Dropdown.Item>
-              <Dropdown.Item>Compra de insumos</Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/pedidos"
+              >
+                Pedidos a preparar
+              </Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/productos"
+              >
+                Productos
+              </Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/productos/rubros"
+              >
+                Rubro productos
+              </Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/insumos"
+              >
+                Insumos
+              </Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/insumos/rubros"
+              >
+                Rubro insumos
+              </Dropdown.Item>
+              <Dropdown.Item
+                as={Link}
+                to="admin/insumos/compra"
+              >
+                Compra de insumos
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>
