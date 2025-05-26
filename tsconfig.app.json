@@ -26,13 +26,17 @@
     // Paths
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"],
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@layouts/*": ["layouts/*"],
+      "@api/*": ["api/*"],
       "@assets/*": ["assets/*"],
-      "@theme/*": ["theme/*"],
-      "@pages/*": ["pages/*"]
+      "@components/*": ["components/*"],
+      "@contexts/*": ["contexts/*"],
+      "@hooks/*": ["hooks/*"],
+      "@libs/*": ["libs/*"],
+      "@pages/*": ["pages/*"],
+      "@routes/*": ["routes/*"],
+      "@schemas/*": ["schemas/*"],
+      "@services/*": ["services/*"],
+      "@/*": ["*"]
     }
   },
   "include": ["src"]

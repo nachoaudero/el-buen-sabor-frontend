@@ -16,10 +16,14 @@
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "@mui/x-date-pickers": "^8.3.0",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.6",
     "material-react-table": "^3.2.1",
     "react": "^19.1.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.3",
+    "react-router": "^7.6.0",
     "zod": "^3.24.4"
   },
   "devDependencies": {
