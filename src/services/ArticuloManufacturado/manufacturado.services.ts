@@ -3,6 +3,7 @@ import type {
   ArticuloManufacturadoRequest,
   ArticuloManufacturadoResponse,
 } from "@dtos/ArticuloManufacturado/ArticuloManufacturadoDtos";
+import {buildFormData} from "@assets/helpers/buildFormData.ts";
 
 export const ManufacturadoService = {
   getAll: async () => {
@@ -32,20 +33,9 @@ export const ManufacturadoService = {
   },
 
   create: async (
-    producto: ArticuloManufacturadoRequest,
-    imagenFile: File | null
-  ) => {
-    // try {
-    //   const response = await api.post<ArticuloManufacturadoResponse>(
-    //     "articulo_manufacturado",
-    //     producto
-    //   );
-    //   return response.data;
-    // } catch (error) {
-    //   console.log("Error al crear el articulo manufacturado: ", error);
-    //   throw error;
-    // }
-
+      producto: ArticuloManufacturadoRequest,
+      imagenFile: File | null
+  ): Promise<ArticuloManufacturadoResponse> => {
     try {
       const formData = new FormData();
 
@@ -53,20 +43,17 @@ export const ManufacturadoService = {
         formData.append("imagenFile", imagenFile);
       }
 
-      Object.entries(producto).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          formData.append(key, value.toString());
-        }
-      });
+      buildFormData(producto, formData);
 
       const response = await api.post<ArticuloManufacturadoResponse>(
-        "articulo_manufacturado",
-        formData
+          "articulo_manufacturado",
+          formData
       );
+
       return response.data;
     } catch (error) {
-      console.error(`Error creating Instrumento:`, error);
+      console.error(`Error creating ArticuloManufacturado:`, error);
       throw error;
     }
-  },
+  }
 };

@@ -1,4 +1,4 @@
-import type { AssignToRelationsDto, ResponseDto } from "@dtos/BaseDtos";
+import type {AssignToRelationsDto, RequestDTO, ResponseDto} from "@dtos/BaseDtos";
 import type {
   ArticuloManufacturadoDetalleRelation,
   ArticuloManufacturadoDetalleRequest,
@@ -18,7 +18,7 @@ export interface ArticuloManufacturadoResponse extends ResponseDto {
 }
 
 // ARTICULO MANUFACTURADO REQUEST
-export interface ArticuloManufacturadoRequest {
+export interface ArticuloManufacturadoRequest extends RequestDTO{
   denominacion: string;
   descripcion: string;
   precioCompra: number;
