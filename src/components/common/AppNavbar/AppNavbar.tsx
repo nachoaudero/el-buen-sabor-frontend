@@ -52,10 +52,7 @@ export const AppNavbar = () => {
           </Nav>
 
           {/* MENU USUARIO */}
-          <Dropdown
-            align={{ md: "end" }}
-            className="shadow-sm"
-          >
+          <Dropdown align={{ md: "end" }}>
             <Dropdown.Toggle
               variant="outline-primary"
               className="d-flex align-items-center gap-1"

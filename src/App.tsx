@@ -1,4 +1,5 @@
 import { AppNavbar } from "@components/common/AppNavbar";
+import { Footer } from "@components/common/Footer";
 import { Outlet } from "react-router";
 
 export const App = () => {
@@ -12,6 +13,9 @@ export const App = () => {
         {/* CONTENIDO DE LA RUTA */}
         <Outlet />
       </section>
+
+      {/* FOOTER */}
+      <Footer />
     </main>
   );
 };

@@ -13,5 +13,5 @@ export interface ArticuloManufacturadoRubroRequest {
 // ARTICULO MANUFACTURADO RUBRO RELACION
 export interface ArticuloManufacturadoRubroRelation
   extends AssignToRelationsDto {
-  denominacion: string;
+  denominacion?: string;
 }

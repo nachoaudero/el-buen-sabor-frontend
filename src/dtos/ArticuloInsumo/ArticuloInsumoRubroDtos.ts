@@ -14,5 +14,5 @@ export interface ArticuloInsumoRubroRequest {
 
 // ARTICULO INSUMO RUBRO RELACION
 export interface ArticuloInsumoRubroRelation extends AssignToRelationsDto {
-  denominacion: string;
+  denominacion?: string;
 }

@@ -1,8 +1,16 @@
 import { App } from "@/App";
-import { Productos } from "@pages/Admin";
-import { Insumos } from "@pages/Admin/Insumos";
-import { InsumosRubros } from "@pages/Admin/InsumosRubros";
-import { ProductosRubros } from "@pages/Admin/ProductosRubros";
+import {
+  InsumoCrearEditar,
+  Insumos,
+  InsumosRubros,
+  InsumosRubrosCrearEditar,
+} from "@pages/Admin/Insumos";
+import {
+  ProductoCrearEditar,
+  Productos,
+  ProductosRubros,
+  ProductosRubrosCrearEditar,
+} from "@pages/Admin/Productos";
 import { Home } from "@pages/Home";
 import { createBrowserRouter, Navigate } from "react-router";
 
@@ -23,19 +31,55 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "productos",
-            element: <Productos />,
-          },
-          {
-            path: "productos/rubros",
-            element: <ProductosRubros />,
+            children: [
+              {
+                index: true,
+                element: <Productos />,
+              },
+              {
+                path: "crear",
+                element: <ProductoCrearEditar />,
+              },
+              {
+                path: "rubros",
+                children: [
+                  {
+                    index: true,
+                    element: <ProductosRubros />,
+                  },
+                  {
+                    path: "crear",
+                    element: <ProductosRubrosCrearEditar />,
+                  },
+                ],
+              },
+            ],
           },
           {
             path: "insumos",
-            element: <Insumos />,
-          },
-          {
-            path: "insumos/rubros",
-            element: <InsumosRubros />,
+            children: [
+              {
+                index: true,
+                element: <Insumos />,
+              },
+              {
+                path: "crear",
+                element: <InsumoCrearEditar />,
+              },
+              {
+                path: "rubros",
+                children: [
+                  {
+                    index: true,
+                    element: <InsumosRubros />,
+                  },
+                  {
+                    path: "crear",
+                    element: <InsumosRubrosCrearEditar />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

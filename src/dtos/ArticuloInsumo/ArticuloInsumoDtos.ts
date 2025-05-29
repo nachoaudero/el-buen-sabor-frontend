@@ -9,8 +9,9 @@ export interface ArticuloInsumoResponse extends ResponseDto {
   precioCompra: number;
   precioVenta: number;
   esParaElaborar: boolean;
-  imagen: string | null;
+  imagen: File | null;
   stock: number;
+  stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
   unidadMedida: UnidadMedidaRelation;
 }
@@ -22,8 +23,9 @@ export interface ArticuloInsumoRequest {
   precioCompra: number;
   precioVenta: number;
   esParaElaborar: boolean;
-  imagen: string | null;
+  imagen: File | null;
   stock: number;
+  stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
   unidadMedida: UnidadMedidaRelation;
 }
@@ -35,8 +37,9 @@ export interface ArticuloInsumoRelation extends AssignToRelationsDto {
   precioCompra: number;
   precioVenta: number | null;
   esParaElaborar: boolean;
-  imagen: string | null;
+  imagen: File | null;
   stock: number;
+  stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
   unidadMedida: UnidadMedidaRelation;
 }

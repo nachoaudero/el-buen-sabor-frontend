@@ -22,7 +22,6 @@ export const GenericTable = <T extends object>({
   enableColumnFilters = true,
   enableSorting = true,
   enablePagination = true,
-  title,
 }: GenericTableProps<T>) => {
   // Crear la tabla con las columnas, los datos y los filtros
   const table = useMaterialReactTable<T>({
@@ -34,10 +33,5 @@ export const GenericTable = <T extends object>({
     enablePagination,
   } as MRT_TableOptions<T>);
 
-  return (
-    <>
-      {title && <h2>{title}</h2>}
-      <MaterialReactTable table={table} />
-    </>
-  );
+  return <MaterialReactTable table={table} />;
 };
