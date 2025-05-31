@@ -8,6 +8,7 @@ import type { MRT_ColumnDef } from "material-react-table";
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { EliminarProductoModal } from "./EliminarProductoModal";
 
 export const Productos = () => {
   // REACT ROUTER
@@ -18,11 +19,15 @@ export const Productos = () => {
     []
   );
   const [loading, setLoading] = useState(false);
+  const [eliminarModal, setEliminarModal] = useState(false);
+  const [productoSeleccionado, setProductoSeleccionado] =
+    useState<ArticuloManufacturadoResponse | null>(null);
 
   // Traer los productos del backend
   const fetchProductos = async () => {
     try {
       setLoading(true);
+      setProductos([]);
 
       const data = await ManufacturadoService.getAll();
 
@@ -31,6 +36,24 @@ export const Productos = () => {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Eliminar producto
+  const handleEliminarProducto = (producto: ArticuloManufacturadoResponse) => {
+    setProductoSeleccionado(producto);
+    setEliminarModal(true);
+  };
+
+  const confirmarEliminacion = async () => {
+    if (!productoSeleccionado) return;
+    try {
+      await ManufacturadoService.delete(productoSeleccionado.id);
+      setEliminarModal(false);
+      setProductoSeleccionado(null);
+      fetchProductos();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -54,8 +77,39 @@ export const Productos = () => {
       header: "Tiempo de preparacion (min)",
     },
     {
-      accessorFn: (row) => `$${row.precioVenta}`,
-      header: "Precio de Venta",
+      accessorFn: (row) => `$ ${row.precioCompra}`,
+      header: "Costo de produccion",
+    },
+    {
+      accessorFn: (row) => `$ ${row.precioVenta}`,
+      header: "Precio de venta",
+    },
+    {
+      accessorFn: (row) => {
+        return `$ ${row.precioVenta - row.precioCompra}`;
+      },
+      header: "Ganancia",
+    },
+    {
+      header: "Acciones",
+      Cell: ({ row }) => (
+        <div className="d-flex gap-2">
+          <Button
+            variant="warning"
+            size="sm"
+            onClick={() => navigate(`editar/${row.original.id}`)}
+          >
+            Editar
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => handleEliminarProducto(row.original)}
+          >
+            Eliminar
+          </Button>
+        </div>
+      ),
     },
   ];
 
@@ -93,9 +147,21 @@ export const Productos = () => {
           </Button>
         </div>
       </div>
-      <GenericTable
-        data={productos}
-        columns={columns}
+
+      {productos.length === 0 ? (
+        <Typography variant="h6">No hay productos cargados.</Typography>
+      ) : (
+        <GenericTable
+          data={productos}
+          columns={columns}
+        />
+      )}
+
+      <EliminarProductoModal
+        eliminarModal={eliminarModal}
+        setEliminarModal={setEliminarModal}
+        productoSeleccionado={productoSeleccionado}
+        confirmarEliminacion={confirmarEliminacion}
       />
     </Container>
   );

@@ -1,6 +1,7 @@
 import {
   MaterialReactTable,
   useMaterialReactTable,
+  type MaterialReactTableProps,
   type MRT_ColumnDef,
   type MRT_TableOptions,
 } from "material-react-table";
@@ -12,7 +13,7 @@ type GenericTableProps<T extends object> = {
   enableColumnFilters?: boolean;
   enableSorting?: boolean;
   enablePagination?: boolean;
-  title?: string;
+  muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
 };
 
 export const GenericTable = <T extends object>({
@@ -22,6 +23,7 @@ export const GenericTable = <T extends object>({
   enableColumnFilters = true,
   enableSorting = true,
   enablePagination = true,
+  muiTableBodyRowProps = {},
 }: GenericTableProps<T>) => {
   // Crear la tabla con las columnas, los datos y los filtros
   const table = useMaterialReactTable<T>({
@@ -31,6 +33,7 @@ export const GenericTable = <T extends object>({
     enableColumnFilters,
     enableSorting,
     enablePagination,
+    muiTableBodyRowProps,
   } as MRT_TableOptions<T>);
 
   return <MaterialReactTable table={table} />;

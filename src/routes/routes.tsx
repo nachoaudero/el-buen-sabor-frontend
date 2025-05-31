@@ -25,6 +25,11 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
 
+      {
+        path: "carrito",
+        element: <Productos />,
+      },
+
       // RUTAS DE ADMINISTRADOR (falta proteger la ruta usando el ProtectedRoute)
       {
         path: "admin",
@@ -38,6 +43,10 @@ export const router = createBrowserRouter([
               },
               {
                 path: "crear",
+                element: <ProductoCrearEditar />,
+              },
+              {
+                path: "editar/:id",
                 element: <ProductoCrearEditar />,
               },
               {
@@ -64,6 +73,10 @@ export const router = createBrowserRouter([
               },
               {
                 path: "crear",
+                element: <InsumoCrearEditar />,
+              },
+              {
+                path: "editar/:id",
                 element: <InsumoCrearEditar />,
               },
               {

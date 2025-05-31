@@ -4,13 +4,9 @@ export interface ResponseDto {
   cretedAt: Date;
 }
 
-export interface RequestDTO {
-
-}
+export interface RequestDTO {}
 
 // RELACION
 export interface AssignToRelationsDto {
   id: number;
 }
-
-

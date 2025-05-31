@@ -8,6 +8,7 @@ import type { MRT_ColumnDef } from "material-react-table";
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { EliminarInsumoModal } from "./EliminarInsumoModal";
 
 export const Insumos = () => {
   // REACT ROUTER
@@ -16,6 +17,9 @@ export const Insumos = () => {
   // Estado de los insumos
   const [insumos, setInsumos] = useState<ArticuloInsumoResponse[]>([]);
   const [loading, setLoading] = useState(false);
+  const [eliminarModal, setEliminarModal] = useState(false);
+  const [insumoSeleccionado, setInsumoSeleccionado] =
+    useState<ArticuloInsumoResponse | null>(null);
 
   // Traer los insumos del backend
   const fetchInsumos = async () => {
@@ -41,6 +45,24 @@ export const Insumos = () => {
     navigate("crear");
   };
 
+  // Eliminar producto
+  const handleEliminarInsumo = (producto: ArticuloInsumoResponse) => {
+    setInsumoSeleccionado(producto);
+    setEliminarModal(true);
+  };
+
+  const confirmarEliminacion = async () => {
+    if (!insumoSeleccionado) return;
+    try {
+      await InsumoService.delete(insumoSeleccionado.id);
+      setEliminarModal(false);
+      setInsumoSeleccionado(null);
+      fetchInsumos();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Solo se renderiza cuando se monta el componente
   useEffect(() => {
     fetchInsumos();
@@ -58,15 +80,55 @@ export const Insumos = () => {
     },
     {
       accessorFn: (row) => `$${row.precioCompra}`,
-      header: "Costo",
+      header: "Precio de compra",
+    },
+    {
+      accessorFn: (row) => {
+        if (row.precioVenta === null) {
+          return "No se vende.";
+        }
+        return `$${row.precioVenta}`;
+      },
+      header: "Precio de venta",
+    },
+    {
+      accessorKey: "stockMinimo",
+      header: "Stock Minimo",
     },
     {
       accessorKey: "stock",
       header: "Stock",
     },
     {
+      accessorFn: (row) => {
+        return row.stock - row.stockMinimo;
+      },
+      header: "Diferencia",
+    },
+    {
       accessorKey: "unidadMedida.denominacion",
       header: "Unidad de medida",
+    },
+    {
+      header: "Acciones",
+      Cell: ({ row }) => (
+        <div className="d-flex gap-2">
+          <Button
+            variant="warning"
+            size="sm"
+            onClick={() => navigate(`editar/${row.original.id}`)}
+          >
+            Editar
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => handleEliminarInsumo(row.original)}
+          >
+            Eliminar
+          </Button>
+        </div>
+      ),
     },
   ];
 
@@ -95,10 +157,21 @@ export const Insumos = () => {
           </Button>
         </div>
       </div>
-      <GenericTable
-        data={insumos}
-        columns={columns}
-        title="Insumos"
+
+      {insumos.length === 0 ? (
+        <Typography variant="h6">No hay productos cargados.</Typography>
+      ) : (
+        <GenericTable
+          data={insumos}
+          columns={columns}
+        />
+      )}
+
+      <EliminarInsumoModal
+        eliminarModal={eliminarModal}
+        setEliminarModal={setEliminarModal}
+        insumoSeleccionado={insumoSeleccionado}
+        confirmarEliminacion={confirmarEliminacion}
       />
     </Container>
   );

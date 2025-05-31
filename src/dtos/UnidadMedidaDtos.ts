@@ -12,5 +12,5 @@ export interface UnidadMedidaRequest {
 
 // UNIDAD MEDIDA RELACION
 export interface UnidadMedidaRelation extends AssignToRelationsDto {
-  denominacion: string;
+  denominacion?: string;
 }

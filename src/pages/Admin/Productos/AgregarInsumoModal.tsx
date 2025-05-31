@@ -1,4 +1,5 @@
 import type { ArticuloInsumoResponse } from "@dtos/ArticuloInsumo";
+import type { ArticuloManufacturadoDetalleRequest } from "@dtos/ArticuloManufacturado";
 import { Button, Form, Modal } from "react-bootstrap";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   cantidad: number;
   setCantidad: React.Dispatch<React.SetStateAction<number>>;
   handleAgregarInsumo: () => void;
+  productoInsumo: ArticuloManufacturadoDetalleRequest[];
 }
 
 export const AgregarInsumoModal = ({
@@ -21,6 +23,7 @@ export const AgregarInsumoModal = ({
   cantidad,
   setCantidad,
   handleAgregarInsumo,
+  productoInsumo,
 }: Props) => {
   return (
     <Modal
@@ -38,17 +41,30 @@ export const AgregarInsumoModal = ({
             value={insumoSeleccionadoId ?? ""}
             onChange={(e) => setInsumoSeleccionadoId(Number(e.target.value))}
           >
-            <option value="">-- Seleccionar --</option>
+            <option
+              value=""
+              disabled
+            >
+              -- Seleccionar --
+            </option>
             {insumos
               .filter((i) => i.esParaElaborar)
-              .map((insumo) => (
-                <option
-                  key={insumo.id}
-                  value={insumo.id}
-                >
-                  {insumo.denominacion}
-                </option>
-              ))}
+              .map((insumo) => {
+                const yaAgregado = productoInsumo.some(
+                  (detalle) => detalle.articuloInsumo.id === insumo.id
+                );
+
+                return (
+                  <option
+                    key={insumo.id}
+                    value={insumo.id}
+                    disabled={yaAgregado}
+                  >
+                    {insumo.denominacion}
+                    {yaAgregado ? " (ya agregado)" : ""}
+                  </option>
+                );
+              })}
           </Form.Select>
         </Form.Group>
 

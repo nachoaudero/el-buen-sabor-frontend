@@ -1,13 +1,14 @@
-import type {
-  ArticuloInsumoRubroRequest,
-  ArticuloInsumoRubroResponse,
-} from "@dtos/ArticuloInsumo";
+import { FullPageLoader } from "@components/common/Loaders";
+import type { ArticuloInsumoRubroResponse } from "@dtos/ArticuloInsumo";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Typography } from "@mui/material";
+import { insumoRubroSchema } from "@schemas/insumo.rubro.schema";
 import { InsumoRubroService } from "@services/ArticuloInsumo";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import type { z } from "zod";
 
 export const InsumosRubrosCrearEditar = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,9 @@ export const InsumosRubrosCrearEditar = () => {
   const [insumosRubros, setInsumosRubros] = useState<
     ArticuloInsumoRubroResponse[]
   >([]);
+  const [selectedPadreId, setSelectedPadreId] = useState<number | "crear">(
+    "crear"
+  );
 
   // REACT ROUTER
   const navigate = useNavigate();
@@ -25,19 +29,19 @@ export const InsumosRubrosCrearEditar = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ArticuloInsumoRubroRequest>();
+    setValue,
+  } = useForm<z.infer<typeof insumoRubroSchema>>({
+    resolver: zodResolver(insumoRubroSchema),
+  });
 
   const onSubmit = handleSubmit(async (formData) => {
-    console.log(formData);
-    // try {
-    //   const data = await InsumoRubroService.create(formData);
+    try {
+      await InsumoRubroService.create(formData);
 
-    //   console.log(data);
-
-    //   navigate("/ebs/admin/insumos/rubros");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      navigate("/ebs/admin/insumos/rubros");
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   // Traer los rubros del backend
@@ -57,7 +61,13 @@ export const InsumosRubrosCrearEditar = () => {
 
   useEffect(() => {
     fetchInsumosRubros();
+
+    setSelectedPadreId("crear");
+    setValue("rubroPadre", null);
   }, []);
+
+  // Cuando los datos esten cargando muestra la pantalla de carga
+  if (loading) return <FullPageLoader />;
 
   return (
     <Container fluid="xl">
@@ -73,29 +83,39 @@ export const InsumosRubrosCrearEditar = () => {
       <Form onSubmit={onSubmit}>
         <Row className="justify-content-center">
           <Col md="6">
+            {/* RUBRO PADRE */}
             <Form.Group className="mb-3">
-              <Form.Group className="mb-3">
-                <Form.Label>Rubro</Form.Label>
-                <Form.Select>
-                  <option value={0}>Seleccione un rubro</option>
-                  {insumosRubros.map((rubro) => {
-                    if (rubro.rubroPadre === null) {
-                      return (
-                        <option
-                          key={rubro.id}
-                          value={rubro.id}
-                        >
-                          {rubro.denominacion}
-                        </option>
-                      );
-                    }
-                  })}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  Seleccione una Categoria.
-                </Form.Control.Feedback>
-              </Form.Group>
-              {/* NOMBRE */}
+              <Form.Label>Rubro padre</Form.Label>
+              <Form.Select
+                value={selectedPadreId}
+                onChange={(e) => {
+                  const value =
+                    e.target.value === "crear"
+                      ? "crear"
+                      : Number(e.target.value);
+                  setSelectedPadreId(value);
+                  setValue(
+                    "rubroPadre",
+                    value === "crear" ? null : { id: value }
+                  );
+                }}
+              >
+                <option value="crear">Crear rubro padre</option>
+                {insumosRubros
+                  .filter((r) => r.rubroPadre === null)
+                  .map((rubro) => (
+                    <option
+                      key={rubro.id}
+                      value={rubro.id}
+                    >
+                      {rubro.denominacion}
+                    </option>
+                  ))}
+              </Form.Select>
+            </Form.Group>
+
+            {/* NOMBRE */}
+            <Form.Group className="mb-3">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"

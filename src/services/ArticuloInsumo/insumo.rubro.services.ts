@@ -1,8 +1,11 @@
 import { api } from "@apis/api";
-import type { ArticuloInsumoRubroResponse } from "@dtos/ArticuloInsumo/ArticuloInsumoRubroDtos";
+import type {
+  ArticuloInsumoRubroRequest,
+  ArticuloInsumoRubroResponse,
+} from "@dtos/ArticuloInsumo/ArticuloInsumoRubroDtos";
 
 export const InsumoRubroService = {
-  getAll: async (): Promise<ArticuloInsumoRubroResponse[]> => {
+  getAll: async () => {
     try {
       const response = await api.get<ArticuloInsumoRubroResponse[]>(
         "articulo_insumo_rubro"
@@ -18,7 +21,7 @@ export const InsumoRubroService = {
     }
   },
 
-  getOne: async (id: number): Promise<ArticuloInsumoRubroResponse> => {
+  getOne: async (id: number) => {
     try {
       const response = await api.get<ArticuloInsumoRubroResponse>(
         `articulo_insumo_rubro/${id}`
@@ -27,6 +30,15 @@ export const InsumoRubroService = {
       return response.data;
     } catch (error) {
       console.log("Error al traer el rubro de articulo insumo: ", error);
+      throw error;
+    }
+  },
+
+  create: async (rubro: ArticuloInsumoRubroRequest) => {
+    try {
+      await api.post("articulo_insumo_rubro", rubro);
+    } catch (error) {
+      console.log("Error al crear el rubro de articulo insumo: ", error);
       throw error;
     }
   },

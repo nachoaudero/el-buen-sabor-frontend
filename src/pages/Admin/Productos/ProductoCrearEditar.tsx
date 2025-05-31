@@ -18,17 +18,24 @@ import {
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
 import type { z } from "zod";
 import { AgregarInsumoModal } from "./AgregarInsumoModal";
 
 export const ProductoCrearEditar = () => {
   const [loading, setLoading] = useState(false);
 
+  // REACT ROUTER
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
+
   // REACT HOOK FORM
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<z.infer<typeof productoSchema>>({
     resolver: zodResolver(productoSchema),
   });
@@ -46,13 +53,20 @@ export const ProductoCrearEditar = () => {
         ...formData,
         precioCompra: calcularCostoTotal(),
         detalles: productoInsumo,
+        imagen: imagenURL,
       };
 
-      console.log(productoNuevo);
+      if (isEditMode) {
+        await ManufacturadoService.update(
+          Number(id),
+          productoNuevo,
+          imagenFile
+        );
+      } else {
+        await ManufacturadoService.create(productoNuevo, imagenFile);
+      }
 
-      const data = await ManufacturadoService.create(productoNuevo, imagenFile);
-
-      console.log(data);
+      navigate("/ebs/admin/productos");
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +130,7 @@ export const ProductoCrearEditar = () => {
 
   // Estado para hacer el preview de la imagen
   const [imagenFile, setImagenFile] = useState<File | null>(null);
+  const [imagenURL, setImagenURL] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -146,9 +161,45 @@ export const ProductoCrearEditar = () => {
     }
   };
 
+  // Fetch el producto por id
+  const fetchProductoById = async () => {
+    try {
+      setImagenURL(null);
+      setLoading(true);
+      const producto = await ManufacturadoService.getOne(Number(id));
+
+      // Setear datos en react-hook-form
+      reset({
+        denominacion: producto.denominacion,
+        descripcion: producto.descripcion,
+        precioVenta: producto.precioVenta,
+        tiempoEstimado: producto.tiempoEstimado,
+        articuloManufacturadoRubro: {
+          id: producto.articuloManufacturadoRubro.id,
+        },
+      });
+
+      // Setear detalles (ingredientes)
+      setProductoInsumo(producto.detalles);
+
+      // Setear imagen si la hay (asumiendo que es una URL)
+      if (producto.imagen) {
+        setImagenURL(producto.imagen);
+      }
+    } catch (error) {
+      console.error("Error al cargar el producto", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+
+    if (id) {
+      fetchProductoById();
+    }
+  }, [id]);
 
   // Cuando los datos esten cargando muestra la pantalla de carga
   if (loading) return <FullPageLoader />;
@@ -161,7 +212,7 @@ export const ProductoCrearEditar = () => {
           variant="h5"
           fontWeight="bold"
         >
-          Crear nuevo producto
+          {isEditMode ? "Editar producto" : "Crear nuevo producto"}
         </Typography>
       </Row>
       <Form onSubmit={onSubmit}>
@@ -171,10 +222,14 @@ export const ProductoCrearEditar = () => {
             md={6}
             className="px-4 pb-4"
           >
-            {imagenFile ? (
+            {imagenFile || imagenURL ? (
               <div className="mb-3">
                 <Image
-                  src={URL.createObjectURL(imagenFile)}
+                  src={
+                    imagenURL
+                      ? `http://localhost:8080/imagenes/${imagenURL}`
+                      : URL.createObjectURL(imagenFile!)
+                  }
                   alt={"imagen"}
                   rounded
                   style={{ width: "100%", height: "auto", objectFit: "cover" }}
@@ -312,8 +367,12 @@ export const ProductoCrearEditar = () => {
                     { header: "Cantidad", accessorKey: "cantidad" },
                     {
                       header: "Costo",
-                      accessorFn: (row) =>
-                        `$ ${row.cantidad * row.articuloInsumo.precioCompra}`,
+                      accessorFn: (row) => {
+                        const precio =
+                          row.cantidad * row.articuloInsumo.precioCompra;
+
+                        return precio.toFixed(2);
+                      },
                     },
                     {
                       header: "Acciones",
@@ -356,6 +415,7 @@ export const ProductoCrearEditar = () => {
               cantidad={cantidad}
               setCantidad={setCantidad}
               handleAgregarInsumo={handleAgregarInsumo}
+              productoInsumo={productoInsumo}
             />
           </Col>
           <Col
@@ -366,7 +426,7 @@ export const ProductoCrearEditar = () => {
               type="submit"
               variant="primary"
             >
-              Crear producto
+              {isEditMode ? "Editar producto" : "Crear producto"}
             </Button>
           </Col>
         </Row>

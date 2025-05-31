@@ -1,9 +1,9 @@
 import { api } from "@apis/api";
+import { buildFormData } from "@assets/helpers/buildFormData.ts";
 import type {
   ArticuloManufacturadoRequest,
   ArticuloManufacturadoResponse,
 } from "@dtos/ArticuloManufacturado/ArticuloManufacturadoDtos";
-import {buildFormData} from "@assets/helpers/buildFormData.ts";
 
 export const ManufacturadoService = {
   getAll: async () => {
@@ -33,9 +33,9 @@ export const ManufacturadoService = {
   },
 
   create: async (
-      producto: ArticuloManufacturadoRequest,
-      imagenFile: File | null
-  ): Promise<ArticuloManufacturadoResponse> => {
+    producto: ArticuloManufacturadoRequest,
+    imagenFile: File | null
+  ) => {
     try {
       const formData = new FormData();
 
@@ -45,15 +45,41 @@ export const ManufacturadoService = {
 
       buildFormData(producto, formData);
 
-      const response = await api.post<ArticuloManufacturadoResponse>(
-          "articulo_manufacturado",
-          formData
-      );
-
-      return response.data;
+      await api.post("articulo_manufacturado", formData);
     } catch (error) {
-      console.error(`Error creating ArticuloManufacturado:`, error);
+      console.error("Error al crear el articulo manufacturado:", error);
       throw error;
     }
-  }
+  },
+
+  update: async (
+    id: number,
+    producto: ArticuloManufacturadoRequest,
+    imagenFile: File | null
+  ) => {
+    try {
+      console.log(producto);
+      const formData = new FormData();
+
+      if (imagenFile) {
+        formData.append("imagenFile", imagenFile);
+      }
+
+      buildFormData(producto, formData);
+
+      await api.put(`articulo_manufacturado/${id}`, formData);
+    } catch (error) {
+      console.error("Error al crear el articulo manufacturado:", error);
+      throw error;
+    }
+  },
+
+  delete: async (id: number) => {
+    try {
+      await api.delete(`articulo_manufacturado/${id}`);
+    } catch (error) {
+      console.error("Error al eliminar el articulo manufacturado:", error);
+      throw error;
+    }
+  },
 };

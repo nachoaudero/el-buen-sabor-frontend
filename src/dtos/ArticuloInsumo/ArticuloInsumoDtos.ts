@@ -1,4 +1,8 @@
-import type {AssignToRelationsDto, RequestDTO, ResponseDto} from "@dtos/BaseDtos";
+import type {
+  AssignToRelationsDto,
+  RequestDTO,
+  ResponseDto,
+} from "@dtos/BaseDtos";
 import type { UnidadMedidaRelation } from "@dtos/UnidadMedidaDtos";
 import type { ArticuloInsumoRubroRelation } from "./ArticuloInsumoRubroDtos";
 
@@ -9,7 +13,7 @@ export interface ArticuloInsumoResponse extends ResponseDto {
   precioCompra: number;
   precioVenta: number;
   esParaElaborar: boolean;
-  imagen: File | null;
+  imagen: string | null;
   stock: number;
   stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
@@ -17,13 +21,13 @@ export interface ArticuloInsumoResponse extends ResponseDto {
 }
 
 // ARTICULO INSUMO REQUEST
-export interface ArticuloInsumoRequest extends RequestDTO{
+export interface ArticuloInsumoRequest extends RequestDTO {
   denominacion: string;
   descripcion: string;
   precioCompra: number;
-  precioVenta: number;
+  precioVenta: number | null;
   esParaElaborar: boolean;
-  imagen: File | null;
+  imagen?: string | null;
   stock: number;
   stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
@@ -37,7 +41,7 @@ export interface ArticuloInsumoRelation extends AssignToRelationsDto {
   precioCompra: number;
   precioVenta: number | null;
   esParaElaborar: boolean;
-  imagen: File | null;
+  imagen: string | null;
   stock: number;
   stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;

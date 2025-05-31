@@ -93,7 +93,11 @@ export const InsumosRubros = () => {
       <GenericTable
         data={insumosRubros}
         columns={columns}
-        title="Rubros de insumos"
+        muiTableBodyRowProps={({ row }) => ({
+          sx: {
+            backgroundColor: row.original.rubroPadre ? "#9edec8" : "#9e9ede",
+          },
+        })}
       />
     </Container>
   );
