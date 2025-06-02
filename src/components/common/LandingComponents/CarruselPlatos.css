@@ -1,0 +1,22 @@
+.carrusel-track {
+  transition: all 0.4s ease-in-out;
+}
+
+.carrusel-card {
+  flex-shrink: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Hover solo en cartas normales (centrales) */
+.carrusel-card:hover:not(.carrusel-edge) {
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+/* Esquinas difuminadas */
+.carrusel-edge {
+  transform: scale(0.75);
+  opacity: 0.3;
+  filter: blur(1px);
+  pointer-events: none;
+}
