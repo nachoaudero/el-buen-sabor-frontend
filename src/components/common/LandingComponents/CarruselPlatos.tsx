@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { CartaPlato } from "../Cards/CartaPlato";
-import { ModalPlato } from "../Cards/ModalPlato";
+import { ModalPlato } from "../Modals/ModalPlato.tsx";
 import type { ArticuloManufacturadoResponse } from "@dtos";
 import "./CarruselPlatos.css";
 
