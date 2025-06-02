@@ -43,25 +43,6 @@ export const Home = () => {
   <h2 className="mb-4">Nuestra Ubicación</h2>
   <MapaLocal />
 </Container>
-
-      {/* Footer */}
-      <footer className="bg-dark text-white pt-4 pb-2">
-        <Container>
-          <Row>
-            <Col md={6}>
-              <p>📞 +52 554 123123</p>
-              <p>📍 Av de los Alpes 666, México</p>
-            </Col>
-            <Col md={6} className="text-md-end">
-              <p>📸 @pizzas_enlima</p>
-              <p>🐦 @pizzas_www</p>
-            </Col>
-          </Row>
-          <p className="text-center mt-3 mb-0">
-            Desarrollado por La Codienda — 2025
-          </p>
-        </Container>
-      </footer>
     </>
   );
 };
