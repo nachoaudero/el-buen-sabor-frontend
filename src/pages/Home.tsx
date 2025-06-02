@@ -43,6 +43,8 @@ export const Home = () => {
   <h2 className="mb-4">Nuestra Ubicación</h2>
   <MapaLocal />
 </Container>
+
+
     </>
   );
 };
