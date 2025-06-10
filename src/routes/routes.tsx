@@ -12,6 +12,8 @@ import {
   ProductosRubrosCrearEditar,
 } from "@pages/Admin/Productos";
 import { Home } from "@pages/Home";
+import Menu from "@pages/Menu"; // ✅ import correcto (default export)
+import Carrito from "@pages/Carrito"; // ✅ import correcto (default export)
 import { createBrowserRouter, Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -24,10 +26,13 @@ export const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
-
+      {
+        path: "menu",
+        element: <Menu />,
+      },
       {
         path: "carrito",
-        element: <Productos />,
+        element: <Carrito />,
       },
 
       // RUTAS DE ADMINISTRADOR (falta proteger la ruta usando el ProtectedRoute)
@@ -110,7 +115,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // RUTA NO ENCONTRADA, REDIRECCIONA A LA RUTA RAIZ
+  // RUTA NO ENCONTRADA GLOBAL, REDIRECCIONA A LA RUTA RAIZ
   {
     path: "*",
     element: (

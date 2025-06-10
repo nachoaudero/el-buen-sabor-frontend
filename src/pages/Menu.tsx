@@ -1,59 +1,64 @@
-
-import { BarraBusqueda } from "@/components/common/BarraBusqueda";
-import { CartaPlato } from "@/components/common/Cards/CartaPlato";
-import { ModalPlato } from "@components/common/Modals/ModalPlato";
-import type { ArticuloManufacturadoResponse } from "@dtos";
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import type { ArticuloManufacturadoResponse } from "@dtos/ArticuloManufacturado";
+import { CartaPlato } from "@/components/common/Cards/CartaPlato";
+import { ModalPlato } from "@/components/common/Modals/ModalPlato";
 
-export const Menu = () => {
+const Menu = () => {
   const [productos, setProductos] = useState<ArticuloManufacturadoResponse[]>([]);
-  const [filtrados, setFiltrados] = useState<ArticuloManufacturadoResponse[]>([]);
-  const [selected, setSelected] = useState<ArticuloManufacturadoResponse | null>(null);
-
+  const [filtroActivo, setFiltroActivo] = useState<ArticuloManufacturadoResponse | null>(null);
+  const [platoSeleccionado, setPlatoSeleccionado] = useState<ArticuloManufacturadoResponse | null>(null);
   const location = useLocation();
-  const productoDesdeNavbar = location.state?.productoFiltrado as ArticuloManufacturadoResponse | undefined;
 
+  // Cargar productos al montar la página
   useEffect(() => {
     fetch("http://localhost:8080/articulo_manufacturado")
       .then((res) => res.json())
-      .then((data) => {
-        setProductos(data);
-        if (productoDesdeNavbar) {
-          // Filtra por coincidencia exacta de ID o denominación
-          const match = data.filter((p) =>
-            p.denominacion.toLowerCase().includes(productoDesdeNavbar.denominacion.toLowerCase())
-          );
-          setFiltrados(match);
-        } else {
-          setFiltrados(data);
-        }
-      });
+      .then(setProductos)
+      .catch(() => alert("Error al cargar productos"));
   }, []);
 
-  const handleSelect = (producto: ArticuloManufacturadoResponse) => {
-    setSelected(producto);
-    setFiltrados([producto]);
-  };
+  // Si venimos desde el navbar con un producto filtrado
+  useEffect(() => {
+    if (location.state?.productoFiltrado) {
+      setFiltroActivo(location.state.productoFiltrado);
+    }
+  }, [location.state]);
+
+  const productosAMostrar = filtroActivo ? [filtroActivo] : productos;
 
   return (
     <Container className="my-5">
-      <h2 className="mb-4">Menú completo</h2>
+      <h2 className="mb-4">🍽️ Nuestro Menú</h2>
 
-      <div className="mb-4">
-        <BarraBusqueda productos={productos} onSelect={handleSelect} />
-      </div>
+      {filtroActivo && (
+        <div className="mb-3">
+          <p>
+            Mostrando resultados para: <strong>{filtroActivo.denominacion}</strong>
+          </p>
+          <Button variant="outline-secondary" onClick={() => setFiltroActivo(null)}>
+            Ver todo el menú
+          </Button>
+        </div>
+      )}
 
-      <Row className="g-4 justify-content-center">
-        {filtrados.map((p) => (
-          <Col key={p.id} xs="auto">
-            <CartaPlato plato={p} onClick={setSelected} />
+      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+        {productosAMostrar.map((plato) => (
+          <Col key={plato.id}>
+            <CartaPlato plato={plato} onClick={() => setPlatoSeleccionado(plato)} />
           </Col>
         ))}
       </Row>
 
-      <ModalPlato show={!!selected} onHide={() => setSelected(null)} plato={selected} />
+      {/* Modal detalle plato */}
+      <ModalPlato
+        show={platoSeleccionado !== null}
+        onHide={() => setPlatoSeleccionado(null)}
+        plato={platoSeleccionado}
+      />
     </Container>
   );
 };
+
+export default Menu;

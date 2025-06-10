@@ -1,6 +1,8 @@
 // src/components/common/Cards/CartaPlato.tsx
 import { Card, Badge } from "react-bootstrap";
 import type { ArticuloManufacturadoResponse } from "@dtos";
+import { BotonAgregarCarrito } from "@/components/common/Buttons/BotonAgregarCarrito";
+import { handleImgError } from "@/utils/imageUtils"; // ✅ import del helper
 
 type Props = {
   plato: ArticuloManufacturadoResponse;
@@ -12,7 +14,7 @@ const BASE_IMG_URL = "http://localhost:8080/imagenes/";
 export const CartaPlato = ({ plato, onClick }: Props) => {
   const imgUrl = plato.imagen
     ? BASE_IMG_URL + plato.imagen
-    : "/default-plato.png"; // imagen fallback
+    : "/default-plato.png"; // fallback cuando plato.imagen es null o vacío
 
   return (
     <Card
@@ -25,6 +27,7 @@ export const CartaPlato = ({ plato, onClick }: Props) => {
         src={imgUrl}
         alt={plato.denominacion}
         style={{ height: "180px", objectFit: "cover" }}
+        onError={handleImgError} // ✅ usar el helper
       />
       <Card.Body className="d-flex flex-column justify-content-between">
         <div>

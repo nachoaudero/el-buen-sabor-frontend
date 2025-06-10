@@ -1,6 +1,7 @@
 import { AppNavbar } from "@components/common/AppNavbar";
 import { Footer } from "@components/common/Footer";
 import { Outlet } from "react-router";
+import { CartProvider } from './context/cart/CartProvider';
 
 export const App = () => {
   return (

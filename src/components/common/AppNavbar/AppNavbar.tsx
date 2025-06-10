@@ -1,10 +1,12 @@
-// src/components/common/AppNavbar.tsx
 import { useEffect, useState } from "react";
 import { Container, Dropdown, Nav, Navbar, Button } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Person } from "@mui/icons-material";
 import { BarraBusqueda } from "@/components/common/BarraBusqueda";
-import type { ArticuloManufacturadoResponse } from "@dtos";
+import type { ArticuloManufacturadoResponse } from "@dtos/ArticuloManufacturado";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useCart } from "@/hooks/useCart";
+import { ModalCarrito } from "@/components/common/Modals/ModalCarrito"; // modal del carrito
 
 export const AppNavbar = () => {
   const location = useLocation();
@@ -12,8 +14,11 @@ export const AppNavbar = () => {
 
   const [productos, setProductos] = useState<ArticuloManufacturadoResponse[]>([]);
   const [showSearch, setShowSearch] = useState(false);
+  const { cartItems } = useCart();
 
-  // Cargar productos solo si se necesita búsqueda
+  const [showCartModal, setShowCartModal] = useState(false); // estado para el modal carrito
+
+  // Detectar si mostrar barra de búsqueda
   useEffect(() => {
     const path = location.pathname;
     const necesitaBusqueda = path === "/ebs" || path === "/menu";
@@ -48,25 +53,47 @@ export const AppNavbar = () => {
           <span className="fw-bold">El Buen Sabor</span>
         </Navbar.Brand>
 
-        {/* Barra de búsqueda solo en landing/menu */}
+        {/* Barra de búsqueda */}
         {showSearch && (
           <div className="flex-grow-1 mx-3" style={{ maxWidth: "600px" }}>
             <BarraBusqueda productos={productos} onSelect={handleSelect} placeholder="Buscar un plato..." />
           </div>
         )}
 
-        {/* Botones según ruta */}
-        {enLanding && (
-          <div className="d-flex gap-2">
-            <Button variant="outline-primary" onClick={() => alert("Login pendiente")}>
-              Iniciar sesión
-            </Button>
-            <Button variant="primary" onClick={() => alert("Registro pendiente")}>
-              Registrarse
-            </Button>
-          </div>
-        )}
+        <div className="d-flex align-items-center gap-2">
+          {/* Botones Landing */}
+          {enLanding && (
+            <>
+              <Button variant="outline-primary" onClick={() => alert("Login pendiente")}>
+                Iniciar sesión
+              </Button>
+              <Button variant="primary" onClick={() => alert("Registro pendiente")}>
+                Registrarse
+              </Button>
+            </>
+          )}
 
+          {/* Ícono del carrito */}
+          {!esAdmin && (
+            <Button
+              variant="outline-secondary"
+              className="position-relative"
+              onClick={() => setShowCartModal(true)} // abre el modal
+            >
+              <ShoppingCartIcon fontSize="small" />
+              {cartItems.length > 0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {cartItems.reduce((acc, item) => acc + item.cantidad, 0)}
+                </span>
+              )}
+            </Button>
+          )}
+        </div>
+
+        {/* Modal del carrito */}
+        <ModalCarrito show={showCartModal} onHide={() => setShowCartModal(false)} />
+
+        {/* Navegación admin */}
         {esAdmin && (
           <>
             <Navbar.Toggle />
