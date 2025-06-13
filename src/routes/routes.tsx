@@ -14,6 +14,7 @@ import {
 import { Home } from "@pages/Home";
 import Menu from "@pages/Menu"; // ✅ import correcto (default export)
 import Carrito from "@pages/Carrito"; // ✅ import correcto (default export)
+import Pedido from "@pages/Pedido";
 import { createBrowserRouter, Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "carrito",
         element: <Carrito />,
+      },
+      {
+        path: "pedido/:id",
+        element: <Pedido />,
       },
 
       // RUTAS DE ADMINISTRADOR (falta proteger la ruta usando el ProtectedRoute)

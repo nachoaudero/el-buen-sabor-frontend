@@ -6,12 +6,22 @@ const CART_STORAGE_KEY = 'cart_items';
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-        const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-        return storedCart ? JSON.parse(storedCart) : [];
+        try {
+            const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+            return storedCart ? JSON.parse(storedCart) : [];
+        } catch (e) {
+            console.error("Error cargando cart_items de localStorage", e);
+            return [];
+        }
     });
 
+    // Guardar en localStorage cada vez que cartItems cambia
     useEffect(() => {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+        try {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+        } catch (e) {
+            console.error("Error guardando cart_items en localStorage", e);
+        }
     }, [cartItems]);
 
     const addItem = (item: CartItem) => {
@@ -33,6 +43,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     const clearCart = () => {
         setCartItems([]);
+        try {
+            localStorage.removeItem(CART_STORAGE_KEY);
+        } catch (e) {
+            console.error("Error limpiando cart_items de localStorage", e);
+        }
     };
 
     const updateQuantity = (id: number, quantity: number) => {

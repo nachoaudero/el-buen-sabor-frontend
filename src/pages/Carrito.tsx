@@ -2,20 +2,31 @@ import { useCart } from "@/hooks/useCart";
 import { CartItemCard } from "@/components/cart/CartItemCard";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { pedidoService } from "@/services/pedido.services";
 
 const Carrito = () => {
   const { cartItems, updateQuantity, removeItem, clearCart, getTotal } = useCart();
   const navigate = useNavigate();
 
-  const handleConfirmarPedido = () => {
-    alert("Pedido confirmado (lógica pendiente)");
+  const handleConfirmarPedido = async () => {
+    try {
+      const pedidoCreado = await pedidoService.create(cartItems, getTotal());
+      console.log("Pedido creado:", pedidoCreado);
+
+      // 🚀 NO hacemos clearCart acá → el Pedido.tsx lo hace al confirmar el pedido
+      // clearCart(); ❌ → NO lo ponemos acá
+
+      navigate(`/ebs/pedido/${pedidoCreado.id}`); // navegación OK
+    } catch (error) {
+      console.error("Error al confirmar pedido", error);
+      alert("Error al confirmar pedido");
+    }
   };
 
   const handleContinuarComprando = () => {
     navigate("/ebs/menu");
   };
 
-  // Ejemplo de sugerencias (pueden venir de un fetch)
   const sugerencias = [
     { id: 101, nombre: "Coca Cola", precio: 1500, imagen: "/default-plato.png" },
     { id: 102, nombre: "Sprite", precio: 1500, imagen: "/default-plato.png" },
@@ -27,7 +38,6 @@ const Carrito = () => {
     <Container className="my-5">
       <h2 className="mb-4">Mi Pedido</h2>
       <Row>
-        {/* Columna izquierda: lista de items */}
         <Col md={8}>
           {cartItems.map((item) => (
             <CartItemCard
@@ -39,7 +49,6 @@ const Carrito = () => {
           ))}
         </Col>
 
-        {/* Columna derecha: resumen */}
         <Col md={4}>
           <div className="border rounded p-3">
             <h5 className="mb-3">{cartItems.length} artículos</h5>
@@ -53,29 +62,6 @@ const Carrito = () => {
           </div>
         </Col>
       </Row>
-
-      {/* Sugerencias */}
-      <div className="my-5">
-        <h4 className="mb-4">Acompañá tu pedido con nuestras bebidas!</h4>
-        <Row>
-          {sugerencias.map((prod) => (
-            <Col key={prod.id} md={3} className="mb-4 text-center">
-              <img
-                src={prod.imagen}
-                alt={prod.nombre}
-                width="120"
-                height="120"
-                style={{ objectFit: "cover", borderRadius: "8px" }}
-              />
-              <h6 className="mt-2">{prod.nombre}</h6>
-              <p className="fw-bold">${prod.precio.toFixed(2)}</p>
-              <Button variant="success" size="sm">
-                Ver más
-              </Button>
-            </Col>
-          ))}
-        </Row>
-      </div>
     </Container>
   );
 };
