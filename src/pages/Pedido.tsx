@@ -100,6 +100,7 @@ const PedidoPage = () => {
     };
 
     try {
+      console.log(pedidoUpdatePayload)
       await axios.put(`http://localhost:8080/pedido/${pedido.id}`, pedidoUpdatePayload);
 
       setPedido(prev => prev ? { ...prev, ...pedidoUpdatePayload } : null);

@@ -7,21 +7,21 @@ const API_URL = "http://localhost:8080/pedido";
 export const pedidoService = {
   create: async (cartItems: CartItem[], total: number): Promise<Pedido> => {
     const pedido = {
-      inicioPreparacion: new Date().toISOString(),
-      finPreparacion: new Date().toISOString(),
+      /*inicioPreparacion: new Date().toISOString(),
+      finPreparacion: new Date().toISOString(),*/
       total: total,
       totalCosto: total / 2,
-      estado: 5,
-      tipoEnvio: 0,
-      formaPago: 1,
-      cliente: { id: 1 },
+      estado: 0,
+      tipoEnvio: 1,
+      formaPago: 0,
+      /*cliente: { id: 1 },
       cajero: { id: 2 },
       cocinero: { id: 3 },
-      delivery: { id: 4 },
+      delivery: { id: 4 },*/
 
       detalles: cartItems.map((item) => ({
-        cantidad: item.quantity,
-        subtotal: item.quantity * item.price,
+        cantidad: item.cantidad,
+        subtotal: item.cantidad * item.precio,
         articuloManufacturado: { id: item.id },
       })),
     };
