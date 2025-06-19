@@ -1,22 +1,23 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { pedidoService } from "@/services/pedido.services";
-import type { Pedido } from "@/types/pedidos.types";
+import { pedidoService } from "@services/Pedido/pedido.services.ts";
+import type {PedidoResponse} from "@dtos/Pedido/PedidoDtos.ts";
 import axios from "axios";
 import { PedidoStep1EntregaPago } from "@/components/Pedido/PedidoStep1EntregaPago";
 import { PedidoStep2Resumen } from "@/components/Pedido/PedidoStep2Resumen";
 import { PedidoStep3Confirmado } from "@/components/Pedido/PedidoStep3Confirmado";
 import { useCart } from "@/hooks/useCart";
-import { CartItem } from "@/types/cart.types";
+import type {CartItem} from "@/types/cart.types";
+import type {FormaPagoEnum, TipoEnvioEnum} from "@dtos/Pedido/Enums.ts";
 
 const PedidoPage = () => {
   const { id } = useParams<{ id: string }>();
   const { cartItems, clearCart } = useCart();
-  const [pedido, setPedido] = useState<Pedido | null>(null);
+  const [pedido, setPedido] = useState<PedidoResponse | null>(null);
   const [step, setStep] = useState<number>(1);
 
-  const [formaEntrega, setFormaEntrega] = useState<"local" | "domicilio" | "">("");
-  const [formaPago, setFormaPago] = useState<"efectivo" | "mercadopago" | "">("");
+  const [formaEntrega, setFormaEntrega] = useState<TipoEnvioEnum>("NO_TIPO_ENVIO");
+  const [formaPago, setFormaPago] = useState<FormaPagoEnum>("NO_FORMA_PAGO");
   const [direccion, setDireccion] = useState<string>("");
   const [telefono, setTelefono] = useState<string>("");
 
@@ -56,7 +57,7 @@ const PedidoPage = () => {
         const data = await pedidoService.getPedidoById(Number(id));
         setPedido(data);
 
-        if (data.estado === 2) {
+        if (data.estado !== "NO_ESTADO") {
           setPedidoArticulos(loadPedidoArticulosFromLocalStorage());
           setStep(3);
         }
@@ -73,37 +74,15 @@ const PedidoPage = () => {
   const handleFinalizarPedido = async () => {
     if (!pedido) return;
 
-    const pedidoUpdatePayload = {
-      tipoEnvio: formaEntrega === "local" ? "TAKEAWAY" : "DELIVERY",
-      formaPago: formaPago === "efectivo" ? "EFECTIVO" : "MERCADOPAGO",
-      estado: pedido.estado, // dejamos el mismo estado para esta prueba
-      inicioPreparacion: new Date().toISOString(),
-      finPreparacion: new Date().toISOString(),
-      total: pedido.total,
-      totalCosto: pedido.totalCosto ?? 0,
-      cliente: pedido.cliente ? { id: pedido.cliente.id } : null,
-      cajero: pedido.cajero ? { id: pedido.cajero.id } : null,
-      cocinero: pedido.cocinero ? { id: pedido.cocinero.id } : null,
-      delivery: pedido.delivery ? { id: pedido.delivery.id } : null,
-      factura: null,
-      detalles: pedido.detalles.map(detalle => ({
-        id: detalle.id,
-        cantidad: detalle.cantidad,
-        subtotal: detalle.subtotal,
-        articuloInsumo: detalle.articuloInsumo
-          ? { id: detalle.articuloInsumo.id }
-          : null,
-        articuloManufacturado: detalle.articuloManufacturado
-          ? { id: detalle.articuloManufacturado.id }
-          : null
-      }))
-    };
+    pedido.estado = "PENDIENTE_DE_PAGO";
+    pedido.tipoEnvio = formaEntrega;
+    pedido.formaPago = formaPago;
+    pedido.totalCosto = 0; //todo hacer una funcion para calcular el costo
 
     try {
-      console.log(pedidoUpdatePayload)
-      await axios.put(`http://localhost:8080/pedido/${pedido.id}`, pedidoUpdatePayload);
-
-      setPedido(prev => prev ? { ...prev, ...pedidoUpdatePayload } : null);
+      console.log(pedido)
+      const response = await axios.put<PedidoResponse>(`http://localhost:8080/pedido/${pedido.id}`, pedido);
+      setPedido(response.data);
 
       clearCart();
       clearPedidoArticulosFromLocalStorage();

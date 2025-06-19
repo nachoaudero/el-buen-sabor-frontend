@@ -1,5 +1,5 @@
 import { Table, Button } from "react-bootstrap";
-import { CartItem } from "@/types/cart.types";
+import type {CartItem} from "@/types/cart.types";
 
 type Props = {
   formaEntrega: "local" | "domicilio";

@@ -3,7 +3,7 @@ import { useLocation } from "react-router";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import type { ArticuloManufacturadoResponse } from "@dtos/ArticuloManufacturado";
 import { CartaPlato } from "@/components/common/Cards/CartaPlato";
-import { ModalPlato } from "@/components/common/Modals/ModalPlato";
+import { ModalItem } from "@components/common/Modals/ModalItem.tsx";
 
 const Menu = () => {
   const [productos, setProductos] = useState<ArticuloManufacturadoResponse[]>([]);
@@ -52,10 +52,10 @@ const Menu = () => {
       </Row>
 
       {/* Modal detalle plato */}
-      <ModalPlato
+      <ModalItem
         show={platoSeleccionado !== null}
         onHide={() => setPlatoSeleccionado(null)}
-        plato={platoSeleccionado}
+        item={platoSeleccionado}
       />
     </Container>
   );

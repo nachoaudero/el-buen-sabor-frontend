@@ -3,7 +3,7 @@ import { handleImgError } from "@/utils/imageUtils";
 
 type Props = {
   item: {
-    id: number;
+    id: number | null;
     nombre: string;
     precio: number;
     imagen?: string;

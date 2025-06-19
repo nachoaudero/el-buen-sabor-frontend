@@ -1,10 +1,11 @@
 import { Button, Form } from "react-bootstrap";
+import type {FormaPagoEnum, TipoEnvioEnum} from "@dtos/Pedido/Enums.ts";
 
 type Props = {
-  formaEntrega: "local" | "domicilio" | "";
-  setFormaEntrega: (value: "local" | "domicilio" | "") => void;
-  formaPago: "efectivo" | "mercadopago" | "";
-  setFormaPago: (value: "efectivo" | "mercadopago" | "") => void;
+  formaEntrega: TipoEnvioEnum;
+  setFormaEntrega: (value: TipoEnvioEnum) => void;
+  formaPago: FormaPagoEnum;
+  setFormaPago: (value: FormaPagoEnum) => void;
   direccion: string;
   setDireccion: (value: string) => void;
   telefono: string;
@@ -26,12 +27,12 @@ export const PedidoStep1EntregaPago = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formaEntrega === "" || formaPago === "") {
+    if (formaEntrega === "NO_TIPO_ENVIO" || formaPago === "NO_FORMA_PAGO") {
       alert("Por favor seleccioná forma de entrega y forma de pago.");
       return;
     }
 
-    if (formaEntrega === "domicilio" && (direccion.trim() === "" || telefono.trim() === "")) {
+    if (formaEntrega === "DELIVERY" && (direccion.trim() === "" || telefono.trim() === "")) {
       alert("Por favor completá la dirección y el teléfono.");
       return;
     }
@@ -47,8 +48,8 @@ export const PedidoStep1EntregaPago = ({
         label="Retiro en local"
         name="formaEntrega"
         value="local"
-        checked={formaEntrega === "local"}
-        onChange={() => setFormaEntrega("local")}
+        checked={formaEntrega === "TAKEAWAY"}
+        onChange={() => setFormaEntrega("TAKEAWAY")}
         className="mb-2"
       />
       <Form.Check
@@ -56,12 +57,12 @@ export const PedidoStep1EntregaPago = ({
         label="Domicilio"
         name="formaEntrega"
         value="domicilio"
-        checked={formaEntrega === "domicilio"}
-        onChange={() => setFormaEntrega("domicilio")}
+        checked={formaEntrega === "DELIVERY"}
+        onChange={() => setFormaEntrega("DELIVERY")}
         className="mb-4"
       />
 
-      {formaEntrega === "domicilio" && (
+      {formaEntrega === "DELIVERY" && (
         <>
           <Form.Group className="mb-3">
             <Form.Label>Dirección de entrega</Form.Label>
@@ -91,8 +92,8 @@ export const PedidoStep1EntregaPago = ({
         label="Efectivo"
         name="formaPago"
         value="efectivo"
-        checked={formaPago === "efectivo"}
-        onChange={() => setFormaPago("efectivo")}
+        checked={formaPago === "EFECTIVO"}
+        onChange={() => setFormaPago("EFECTIVO")}
         className="mb-2"
       />
       <Form.Check
@@ -100,8 +101,8 @@ export const PedidoStep1EntregaPago = ({
         label="MercadoPago"
         name="formaPago"
         value="mercadopago"
-        checked={formaPago === "mercadopago"}
-        onChange={() => setFormaPago("mercadopago")}
+        checked={formaPago === "MERCADOPAGO"}
+        onChange={() => setFormaPago("MERCADOPAGO")}
         className="mb-4"
       />
 

@@ -1,4 +1,4 @@
-import type { AssignToRelationsDto, ResponseDto } from "./BaseDtos";
+import type { AssignToRelationsDto, ResponseDto } from "../BaseDtos.ts";
 
 // UNIDAD MEDIDA RESPONSE
 export interface UnidadMedidaResponse extends ResponseDto {

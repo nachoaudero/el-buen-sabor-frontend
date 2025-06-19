@@ -3,7 +3,7 @@ import type {
   RequestDTO,
   ResponseDto,
 } from "@dtos/BaseDtos";
-import type { UnidadMedidaRelation } from "@dtos/UnidadMedidaDtos";
+import type { UnidadMedidaRelation } from "@dtos/UnidadMedida/UnidadMedidaDtos.ts";
 import type { ArticuloInsumoRubroRelation } from "./ArticuloInsumoRubroDtos";
 
 // ARTICULO INSUMO RESPONSE
@@ -46,4 +46,8 @@ export interface ArticuloInsumoRelation extends AssignToRelationsDto {
   stockMinimo: number;
   articuloInsumoRubro: ArticuloInsumoRubroRelation;
   unidadMedida: UnidadMedidaRelation;
+}
+
+export interface InsumoCrearDetallePedido {
+  id: number;
 }

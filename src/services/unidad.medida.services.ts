@@ -1,5 +1,5 @@
 import { api } from "@apis/api";
-import type { UnidadMedidaResponse } from "@dtos/UnidadMedidaDtos";
+import type { UnidadMedidaResponse } from "@dtos/UnidadMedida/UnidadMedidaDtos.ts";
 
 export const UnidadMedidaService = {
   getAll: async () => {

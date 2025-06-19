@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CartContext } from './CartContext';
-import { CartItem } from '../../types/cart.types';
+import { type CartItem } from '@/types/cart.types.ts';
 
 const CART_STORAGE_KEY = 'cart_items';
 

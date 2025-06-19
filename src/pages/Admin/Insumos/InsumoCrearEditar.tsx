@@ -3,7 +3,7 @@ import type {
   ArticuloInsumoRequest,
   ArticuloInsumoRubroResponse,
 } from "@dtos/ArticuloInsumo";
-import type { UnidadMedidaResponse } from "@dtos/UnidadMedidaDtos";
+import type { UnidadMedidaResponse } from "@dtos/UnidadMedida/UnidadMedidaDtos.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Typography } from "@mui/material";
 import { insumoSchema } from "@schemas/insumo.schema";

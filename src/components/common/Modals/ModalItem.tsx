@@ -1,41 +1,60 @@
 import { useState } from "react";
 import { Modal, Button, Row, Col } from "react-bootstrap";
-import type { ArticuloManufacturadoResponse } from "@dtos";
 import { useCart } from "@/hooks/useCart";
 import { handleImgError } from "@/utils/imageUtils";
+import type {ArticuloManufacturadoResponse} from "@dtos/ArticuloManufacturado";
+import type {ArticuloInsumoResponse} from "@dtos/ArticuloInsumo";
+import type {PromocionResponse} from "@dtos/Promocion";
+import type {CartItem} from "@/types/cart.types.ts";
 
 type Props = {
   show: boolean;
   onHide: () => void;
-  plato: ArticuloManufacturadoResponse | null;
+  item: ArticuloManufacturadoResponse | ArticuloInsumoResponse | PromocionResponse | null;
 };
 
 const BASE_IMG_URL = "http://localhost:8080/imagenes/";
 
-export const ModalPlato = ({ show, onHide, plato }: Props) => {
+export const ModalItem = ({ show, onHide, item }: Props) => {
   const { addItem } = useCart();
   const [cantidad, setCantidad] = useState(1);
 
-  if (!plato) return null;
+  if (!item) return null;
 
-  const imgUrl = plato.imagen
-    ? BASE_IMG_URL + plato.imagen
+  const imgUrl = item.imagen
+    ? BASE_IMG_URL + item.imagen
     : "/default-plato.png";
 
-  const disponible = plato.stock === undefined || plato.stock === null || plato.stock > 0;
+  const disponible = true /*= plato.stock === undefined || plato.stock === null || plato.stock > 0;
+ //todo hacer una funcion para determinar si el producto tiene stock disponible y cuanto tiene
+  const maxStock = plato.stock || 99;*/
 
-  const maxStock = plato.stock || 99;
+  const maxStock = 99;
+
+
 
   const handleAddToCart = () => {
     if (!disponible) return;
 
+    let tipo: CartItem['tipo'];
+
+    if ('tiempoEstimado' in item) {
+      tipo = 'manufacturado';
+    } else if ('esParaElaborar' in item) {
+      tipo = 'insumo';
+    } else if ('fechaDesde' in item) {
+      tipo = 'promocion';
+    } else {
+      throw new Error('Tipo de item desconocido');
+    }
+
     addItem({
-      id: plato.id,
-      nombre: plato.denominacion,
-      precio: plato.precioVenta,
+      id: item.id,
+      nombre: item.denominacion,
+      precio: item.precioVenta,
       imagen: imgUrl,
       cantidad: cantidad,
-      tipo: "manufacturado",
+      tipo: tipo,
     });
 
     onHide();
@@ -62,7 +81,7 @@ export const ModalPlato = ({ show, onHide, plato }: Props) => {
           <Col md={6} className="text-center mb-3 mb-md-0">
             <img
               src={imgUrl}
-              alt={plato.denominacion}
+              alt={item.denominacion}
               className="img-fluid rounded"
               style={{ maxHeight: "300px", objectFit: "cover" }}
               onError={handleImgError}
@@ -72,15 +91,15 @@ export const ModalPlato = ({ show, onHide, plato }: Props) => {
           {/* Info */}
           <Col md={6}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 className="mb-0">{plato.denominacion}</h3>
+              <h3 className="mb-0">{item.denominacion}</h3>
               <div
                 className="fw-bold px-3 py-1 rounded"
                 style={{ backgroundColor: "#FFD700", color: "#000", fontSize: "1.2rem" }}
               >
-                ${plato.precioVenta.toFixed(2)}
+                ${item.precioVenta.toFixed(2)}
               </div>
             </div>
-            <p className="text-muted">{plato.descripcion}</p>
+            <p className="text-muted">{item.descripcion}</p>
 
             {/* Selector de cantidad */}
             {disponible && (

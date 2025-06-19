@@ -2,20 +2,16 @@ import { useCart } from "@/hooks/useCart";
 import { CartItemCard } from "@/components/cart/CartItemCard";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { pedidoService } from "@/services/pedido.services";
+import { pedidoService } from "@services/Pedido/pedido.services.ts";
 
 const Carrito = () => {
-  const { cartItems, updateQuantity, removeItem, clearCart, getTotal } = useCart();
+  const { cartItems, updateQuantity, removeItem, getTotal } = useCart();
   const navigate = useNavigate();
 
   const handleConfirmarPedido = async () => {
     try {
       const pedidoCreado = await pedidoService.create(cartItems, getTotal());
       console.log("Pedido creado:", pedidoCreado);
-
-      // 🚀 NO hacemos clearCart acá → el Pedido.tsx lo hace al confirmar el pedido
-      // clearCart(); ❌ → NO lo ponemos acá
-
       navigate(`/ebs/pedido/${pedidoCreado.id}`); // navegación OK
     } catch (error) {
       console.error("Error al confirmar pedido", error);

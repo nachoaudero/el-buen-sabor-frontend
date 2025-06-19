@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { CartaPlato } from "../Cards/CartaPlato";
-import { ModalPlato } from "../Modals/ModalPlato.tsx";
-import type { ArticuloManufacturadoResponse } from "@dtos";
+import { ModalItem } from "../Modals/ModalItem.tsx";
 import "./CarruselPlatos.css";
+import type {ArticuloManufacturadoResponse} from "@dtos/ArticuloManufacturado";
 
 export const CarruselPlatos = () => {
   const [platos, setPlatos] = useState<ArticuloManufacturadoResponse[]>([]);
@@ -77,7 +77,7 @@ export const CarruselPlatos = () => {
         <FaChevronRight size={24} />
       </Button>
 
-      <ModalPlato show={!!selected} onHide={() => setSelected(null)} plato={selected} />
+      <ModalItem show={!!selected} onHide={() => setSelected(null)} item={selected} />
     </Container>
   );
 };

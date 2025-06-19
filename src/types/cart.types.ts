@@ -1,8 +1,8 @@
 export interface CartItem {
-    id: number | null;
+    id: number;
     nombre: string;
     precio: number;
     imagen?: string;
     cantidad: number;
-    tipo: 'insumo' | 'manufacturado';
+    tipo: 'insumo' | 'manufacturado' | 'promocion';
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CartItem } from '../../types/cart.types';
+import { type CartItem } from '@/types/cart.types.ts';
 
 export interface CartContextType {
     cartItems: CartItem[];

@@ -41,3 +41,7 @@ export interface ArticuloManufacturadoRelation extends AssignToRelationsDto {
   articuloManufacturadoRubro: ArticuloManufacturadoRubroRelation;
   detalles: ArticuloManufacturadoDetalleRelation[];
 }
+
+export interface ManufacturadoCrearDetallePedido {
+  id: number;
+}
