@@ -1,54 +1,84 @@
-# React + TypeScript + Vite
+# 🍽️ El Buen Sabor – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositorio contiene el código fuente del **Frontend** del sistema de gestión para el restaurante _El Buen Sabor_, desarrollado como trabajo final de la materia **Laboratorio de Computación IV** de la carrera TUP (UTN – FRM).
 
-Currently, two official plugins are available:
+La aplicación permite a los clientes realizar pedidos online y a los empleados del restaurante gestionar usuarios, productos, pedidos, cocina, delivery, facturación, estadísticas y más.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🧑‍💻 Integrantes del Proyecto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Ignacio Audero
+- Aarón Kibysz
+- Francisco Martínez Chiappetta
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📌 Tecnologías Utilizadas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React 18+**
+- **TypeScript 5+**
+- **React Bootstrap** (estilos y componentes)
+- **React Router DOM** (ruteo y navegación)
+- **Axios** (HTTP client)
+- **Vite** o Create React App (según la base del proyecto)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Autenticación e Integraciones
+
+- **Google OAuth 2.0** (login con cuenta de Google)
+- **JWT** (JSON Web Token para seguridad y sesión)
+- **Mercado Pago** (pasarela de pago)
+- **MailJS** (envío automático de mails con comprobantes)
+
+## 🎯 Funcionalidades Implementadas
+
+### 👤 Módulo I – Usuarios
+
+- Registro de clientes con validación de contraseña segura y verificación de email único
+- Login con usuario/contraseña o cuenta de Google
+- Edición de datos personales (clientes y empleados)
+- Registro y gestión de empleados por parte del administrador
+- ABM de usuarios (altas, bajas, modificación de datos)
+- Asignación automática de roles y permisos
+
+### 🛒 Módulo II – Pedidos
+
+- Landing page accesible sin login con listado de productos
+- Buscador dinámico de productos
+- Carrito de compras con suma/resta de unidades y cálculo de subtotal
+- Confirmación de pedido con selección de método de entrega y forma de pago
+- Integración con Mercado Pago para pagos online
+- Generación de factura automática con envío por correo
+- Historial de pedidos con acceso a facturas descargables
+
+### 📦 Módulo III – Recepción y Entrega
+
+- Panel del cajero con pedidos filtrados por estado
+- Transiciones de estados: A confirmar, En cocina, Listo, En delivery, Entregado
+- Control de pagos para permitir o impedir entregas
+
+### 🍳 Módulo IV – Cocina
+
+- Vista de pedidos en cocina con tiempos estimados
+- Detalle de recetas y control de estado a “Listo”
+- Cálculo dinámico de tiempo estimado de preparación + entrega
+
+### 🧾 Módulo V – Facturación
+
+- Facturación automática tras confirmación de pedido y pago
+- Anulación mediante nota de crédito con reintegro automático al stock
+
+### 🧂 Módulo VI – Gestión de Rubros, Ingredientes y Productos
+
+- ABM completo de ingredientes, rubros e insumos
+- Registro de compras con actualización de stock y costo
+- Control de stock mínimo y alertas
+- Creación de productos con receta, imagen, tiempo estimado y rubro
+- Cálculo automático del costo de productos y control de precio
+
+### 📊 Módulo VII – Estadísticas e Informes
+
+- Ranking de productos más vendidos por categoría y fechas
+- Ranking de clientes por cantidad de pedidos o facturación
+- Informe de ingresos, costos y ganancias por rango de fechas
+- Exportación de reportes a Excel
