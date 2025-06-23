@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import type { ArticuloManufacturadoResponse } from "@dtos/ArticuloManufacturado";
 import { CartaPlato } from "@/components/common/Cards/CartaPlato";
 import { ModalItem } from "@components/common/Modals/ModalItem.tsx";
+import {ManufacturadoService} from "@services/ArticuloManufacturado";
 
 const Menu = () => {
   const [productos, setProductos] = useState<ArticuloManufacturadoResponse[]>([]);
@@ -11,12 +12,18 @@ const Menu = () => {
   const [platoSeleccionado, setPlatoSeleccionado] = useState<ArticuloManufacturadoResponse | null>(null);
   const location = useLocation();
 
+  const getArticulosManufacturados = async () => {
+      try {
+          const response = await ManufacturadoService.getAll()
+          setProductos(response)
+      } catch (e) {
+          console.log("Error al traer articulos del menu" + e)
+      }
+  }
+
   // Cargar productos al montar la página
   useEffect(() => {
-    fetch("http://localhost:8080/articulo_manufacturado")
-      .then((res) => res.json())
-      .then(setProductos)
-      .catch(() => alert("Error al cargar productos"));
+      getArticulosManufacturados();
   }, []);
 
   // Si venimos desde el navbar con un producto filtrado

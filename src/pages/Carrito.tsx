@@ -23,12 +23,12 @@ const Carrito = () => {
     navigate("/ebs/menu");
   };
 
-  const sugerencias = [
+  /*const sugerencias = [
     { id: 101, nombre: "Coca Cola", precio: 1500, imagen: "/default-plato.png" },
     { id: 102, nombre: "Sprite", precio: 1500, imagen: "/default-plato.png" },
     { id: 103, nombre: "Agua", precio: 1000, imagen: "/default-plato.png" },
     { id: 104, nombre: "Cerveza", precio: 2000, imagen: "/default-plato.png" },
-  ];
+  ];*/
 
   return (
     <Container className="my-5">
